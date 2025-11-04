@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crop Yield Prediction - AgriTech</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="theme.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-secondary, #f6f9f6);
+            color: var(--text-primary, #333);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav-back {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-back:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .page-title p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .form-container {
+            background: var(--bg-primary, #fff);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-area {
+            background: var(--bg-primary, #fff);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+            text-align: center;
+        }
+
+        .result-area.show {
+            display: block;
+        }
+
+        .result-success {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(46, 125, 50, 0.1));
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2e7d32;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: #4caf50;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.1);
+            border: 2px solid #f44336;
+            border-radius: 10px;
+            padding: 1rem;
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+
+        /* Dark mode styles */
+        [data-theme="dark"] .form-container,
+        [data-theme="dark"] .result-area {
+            background: #2d2d2d;
+            border-color: #404040;
+        }
+
+        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group select {
+            background: #3d3d3d;
+            border-color: #505050;
+            color: #ffffff;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>Crop Yield Prediction</h1>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button class="theme-toggle" aria-label="Toggle dark/light mode">
+                    <i class="fas fa-sun sun-icon"></i>
+                    <i class="fas fa-moon moon-icon"></i>
+                    <span class="theme-text">Light</span>
+                </button>
+                <a href="main.html" class="nav-back">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>📊 Predict Crop Yield</h1>
+            <p>Enter your farming parameters to get AI-powered yield predictions</p>
+        </div>
+
+        <div class="form-container">
+            <form id="yieldForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="crop">Crop Type:</label>
+                        <select id="crop" name="crop" required>
+                            <option value="">Select Crop</option>
+                            <option value="Rice">Rice</option>
+                            <option value="Wheat">Wheat</option>
+                            <option value="Maize">Maize</option>
+                            <option value="Sugarcane">Sugarcane</option>
+                            <option value="Cotton">Cotton</option>
+                            <option value="Jowar">Jowar</option>
+                            <option value="Bajra">Bajra</option>
+                            <option value="Barley">Barley</option>
+                            <option value="Gram">Gram</option>
+                            <option value="Tur">Tur</option>
+                            <option value="Sesamum">Sesamum</option>
+                            <option value="Groundnut">Groundnut</option>
+                            <option value="Sunflower">Sunflower</option>
+                            <option value="Safflower">Safflower</option>
+                            <option value="Soyabean">Soyabean</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="season">Season:</label>
+                        <select id="season" name="season" required>
+                            <option value="">Select Season</option>
+                            <option value="Kharif">Kharif (Monsoon)</option>
+                            <option value="Rabi">Rabi (Winter)</option>
+                            <option value="Summer">Summer</option>
+                            <option value="Whole Year">Whole Year</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">State:</label>
+                        <select id="state" name="state" required>
+                            <option value="">Select State</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="West Bengal">West Bengal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="year">Year:</label>
+                        <input type="number" id="year" name="year" min="2020" max="2030" value="2024" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="area">Area (Hectares):</label>
+                        <input type="number" id="area" name="area" step="0.01" min="0" placeholder="e.g., 10.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="production">Expected Production (Tonnes):</label>
+                        <input type="number" id="production" name="production" step="0.01" min="0" placeholder="e.g., 25.0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rainfall">Annual Rainfall (mm):</label>
+                        <input type="number" id="rainfall" name="rainfall" step="0.1" min="0" placeholder="e.g., 1200.5" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">
+                    <i class="fas fa-chart-line"></i> Predict Yield
+                </button>
+            </form>
+        </div>
+
+        <!-- Results Area -->
+        <div class="result-area" id="resultArea">
+            <h3><i class="fas fa-seedling"></i> Yield Prediction Results</h3>
+            <div id="resultContent">
+                <!-- Results will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="theme.js"></script>
+    <script>
+        document.getElementById('yieldForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const resultArea = document.getElementById('resultArea');
+            const resultContent = document.getElementById('resultContent');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Predicting...';
+            
+            resultArea.className = 'result-area show';
+            resultContent.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-chart-line fa-spin"></i>
+                    <p>Analyzing your farming data...</p>
+                </div>
+            `;
+
+            try {
+                // Collect form data
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+
+                // Send request to prediction endpoint
+                const response = await fetch('/predict-yield', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    resultContent.innerHTML = `
+                        <div class="result-success">
+                            <div class="result-value">${result.prediction} tonnes/hectare</div>
+                            <div class="result-label">Predicted Yield</div>
+                        </div>
+                        <div style="text-align: left; margin-top: 1rem;">
+                            <h4>Input Parameters:</h4>
+                            <p><strong>Crop:</strong> ${result.crop}</p>
+                            <p><strong>Season:</strong> ${result.season}</p>
+                            <p><strong>State:</strong> ${result.state}</p>
+                            <p><strong>Area:</strong> ${result.input_params.area} hectares</p>
+                            <p><strong>Expected Production:</strong> ${result.input_params.production} tonnes</p>
+                            <p><strong>Rainfall:</strong> ${result.input_params.rainfall} mm</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(result.message || 'Prediction failed');
+                }
+
+            } catch (error) {
+                resultContent.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Error:</strong> ${error.message}
+                        <br><br>
+                        Please check your inputs and try again.
+                    </div>
+                `;
+            } finally {
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-chart-line"></i> Predict Yield';
+            }
+        });
+    </script>
+</body>
+</html>

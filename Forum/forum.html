@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../images/logo.png">
+  <meta charset="UTF-8" />
+  <title>Farmer Forum</title>
+  <link rel="icon" type="image/png" href="/AgriTech/images/logo.png">
+  <link rel="stylesheet" href="farmer.css" />
+  <link rel="stylesheet" href="../theme.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background-color: var(--bg-secondary, #f7f7f7);
+    color: var(--text-primary, #333);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+
+  h1, h2 {
+    color: var(--text-primary, #2c3e50);
+  }
+
+
+  form {
+    margin-bottom: 20px;
+    background: var(--bg-primary, white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px var(--shadow-light, rgba(0, 0, 0, 0.1));
+  }
+
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    background: var(--bg-primary, white);
+    color: var(--text-primary, #333);
+  }
+
+
+  button {
+    padding: 10px 20px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+
+  button:hover {
+    background-color: #27ae60;
+  }
+
+
+  .forum-post {
+    background: var(--bg-primary, white);
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+  }
+
+
+  .forum-post strong {
+    color: #34495e;
+  }
+</style>
+
+
+</head>
+<body>
+  <h1>Farmer Forum</h1>
+  
+  <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <button class="theme-toggle" aria-label="Toggle dark/light mode" style="background: rgba(46, 125, 50, 0.1); border: 1px solid rgba(46, 125, 50, 0.3); color: #2e7d32; padding: 8px 12px; border-radius: 20px; font-size: 12px;">
+      <i class="fas fa-sun sun-icon"></i>
+      <i class="fas fa-moon moon-icon"></i>
+      <span class="theme-text">Light</span>
+    </button>
+  </div>
+
+  <a href="../main.html" style="text-decoration: none;">
+  <button type="button">Back to Main Page</button>
+</a>
+
+
+  <form id="forumForm">
+    <input type="text" name="name" placeholder="Your Name" required />
+    <textarea name="message" placeholder="Share your experience..." required></textarea>
+    <button type="submit">Post</button>
+  </form>
+
+
+  <h2>Recent Posts</h2>
+  <div id="forumPosts"></div>
+
+
+  <script src="forum.js"></script>
+  <script src="../theme.js"></script>
+</body>
+</html>
+
+
+

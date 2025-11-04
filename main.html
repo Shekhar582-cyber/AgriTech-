@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <meta name="description" content="AgriTech - Empowering Agriculture Through Technology." />
+  <title>AgriTech Dashboard</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/AgriTech/images/logo.png" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../static/style.css" />
+  <link rel="stylesheet" href="main.css" />
+  <link rel="stylesheet" href="theme.css" />
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Inline Styles (can move to CSS file later) -->
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: var(--bg-secondary, #f6f9f6);
+      color: var(--text-primary, #333);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+      background: var(--bg-primary, #fff);
+      border-radius: 10px;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    /* Header within container */
+    .container header h1 {
+      color: var(--text-primary, #333) !important;
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .container header p {
+      color: var(--text-secondary, #666) !important;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .loan-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .loan-card {
+      background: var(--bg-primary, #fff);
+      border: 2px solid rgba(76, 175, 80, 0.2);
+      /* Light green border */
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .loan-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(76, 175, 80, 0.2);
+      border-color: rgba(76, 175, 80, 0.4);
+    }
+
+    .loan-card img {
+      width: 100%;
+      height: 150px;
+      /* Fixed height for uniformity */
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .loan-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .loan-card span {
+      display: block;
+      padding: 15px;
+      font-weight: 600;
+      background: rgba(76, 175, 80, 0.1);
+      color: var(--text-primary, #333) !important;
+      border-top: 1px solid rgba(76, 175, 80, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    /* Loan Guide section */
+    .loan-guide-section {
+      text-align: center;
+      margin-top: 50px;
+      background: var(--bg-primary, #fff) !important;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(76, 175, 80, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .loan-guide-section h2 {
+      color: var(--text-primary, #333) !important;
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .loan-guide-section p {
+      color: var(--text-secondary, #666) !important;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-green {
+      display: inline-block;
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
+      color: #fff !important;
+      padding: 12px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+    }
+
+    .btn-green:hover {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4);
+      color: #fff !important;
+      text-decoration: none;
+    }
+
+    select.language-select {
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-left: 15px;
+      border: 2px solid rgba(76, 175, 80, 0.3);
+      background: var(--bg-primary, #fff);
+      color: var(--text-primary, #333);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    select.language-select:focus {
+      outline: none;
+      border-color: #4caf50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    /* Dark mode specific styles */
+    [data-theme="dark"] .container {
+      background: #2d2d2d !important;
+      border: 1px solid #404040;
+    }
+
+    [data-theme="dark"] .loan-guide-section {
+      background: #2d2d2d !important;
+      border-color: #404040;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="dark"] .loan-guide-section h2 {
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .loan-guide-section p {
+      color: #cccccc !important;
+    }
+
+    [data-theme="dark"] .container header h1 {
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .container header p {
+      color: #cccccc !important;
+    }
+
+    [data-theme="dark"] .loan-card {
+      background: #3d3d3d !important;
+      border-color: #505050;
+    }
+
+    [data-theme="dark"] .loan-card span {
+      background: rgba(76, 175, 80, 0.2) !important;
+      color: #ffffff !important;
+      border-top-color: #505050;
+    }
+
+    [data-theme="dark"] select.language-select {
+      background: #3d3d3d !important;
+      border-color: #505050;
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] select.language-select option {
+      background: #3d3d3d !important;
+      color: #ffffff !important;
+    }
+
+    /* Ensure text is always visible during transitions */
+    * {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+    }
+
+    /* Force text color inheritance */
+    .loan-guide-section *:not(.btn-green) {
+      color: inherit !important;
+    }
+
+    .container *:not(.btn-green):not(select) {
+      color: inherit !important;
+    }
+
+    /* Auth message styles */
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+
+    .auth-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      max-width: 400px;
+    }
+
+    .auth-message-success {
+      background: linear-gradient(135deg, #4caf50, #45a049);
+    }
+
+    .auth-message-error {
+      background: linear-gradient(135deg, #f44336, #e53935);
+    }
+
+    .auth-message-info {
+      background: linear-gradient(135deg, #2196f3, #1976d2);
+    }
+
+    .auth-message-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .auth-message-content i {
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header-nav-wrapper">
+    <header>
+      <div class="brand">
+        <img src="images/logo.png" alt="AgriTech logo" class="site-logo">
+        <h2>Welcome to AgriTech</h2>
+      </div>
+      <div class="header-buttons">
+        <a href="cropCalendar.html" class="calendar-button" title="Crop Calendar">
+          <span class="calendar-icon">📅</span>
+          Calendar
+        </a>
+        <a href="feed-back.html" class="feedback-button">Feedback</a>
+        <a href="#" class="logout-button" onclick="showLogoutConfirmation()">Logout</a>
+        <button class="theme-toggle" aria-label="Toggle dark/light mode">
+          <i class="fas fa-sun sun-icon"></i>
+          <i class="fas fa-moon moon-icon"></i>
+          <span class="theme-text">Light</span>
+        </button>
+      </div>
+    </header>
+
+    <nav>
+      <ul>
+        <li>
+          <a href="/Crop Recommendation/templates/index.html">🌱 Crop Recommendation</a>
+        </li>
+        <li>
+          <a href="crop-yield-prediction">📊 Yield Prediction</a>
+        </li>
+
+        <li><a href="organic.html">🌿 Organic Farming</a></li>
+        <li><a href="farmer.html">👥 Farmer Network</a></li>
+        <li><a href="weather.html">⛅ Weather Check</a></li>
+        <li><a href="shopkeeper.html">🏪 Shopkeeper Listings</a></li>
+        <li><a href="chat.html">🤖 ChatBot</a></li>
+        <li><a href="ollama-predictions.html">🧠 Ollama AI Predictions</a></li>
+        <li><a href="plantation.html">🌳 Plantation</a></li>
+        <li>
+          <a href="./Crop_Planning/templates/cropplan.html">📅 Crop Planning</a>
+        </li>
+        <li>
+          <a href="./Labour_Alerts/templates/labour.html">⚠ Labour Alerts</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Main Section -->
+  <nav>
+    <main>
+      <div class="section-title">
+        <h2>Comprehensive Agricultural Solutions</h2>
+        <p>
+          Explore our cutting-edge tools designed to revolutionize your farming
+          experience with AI-powered insights and community collaboration.
+        </p>
+      </div>
+
+      <!-- Grid Section (Cards) -->
+      <section class="grid-container">
+        <a href="Crop Recommendation/templates/index.html" class="grid-item">
+          <img src="images/crop.avif" alt="Crop Recommendation" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Crop Recommendation</h3>
+            <p>
+              Find the best crop to cultivate based on your soil and weather
+              conditions using advanced AI algorithms.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">AI Powered</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="crop-yield-prediction" class="grid-item">
+          <img src="images/yield.avif" alt="Yield Prediction" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Yield Prediction</h3>
+            <p>
+              Predict the expected yield for different crops using advanced
+              machine learning models and historical data.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">ML Analytics</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+
+
+        <a href="organic.html" class="grid-item">
+          <img src="images/organic.jpg" alt="Organic Farming Guide" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Organic Farming Guide</h3>
+            <p>
+              Learn sustainable organic practices—from soil preparation to
+              eco-friendly pest control and certification processes.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Sustainable</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="weather.html" class="grid-item">
+          <img src="images/weather.webp" alt="Weather check" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Weather Check</h3>
+            <p>
+              Check current weather of your place and weather for upcoming hours and days to plan your farming
+              practices.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Real-time</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="farmer.html" class="grid-item">
+          <img src="images/farmer.avif" alt="Farmer Connection" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Farmer Connection</h3>
+            <p>
+              Connect with fellow farmers, share experiences, and access
+              resources to improve your farming practices.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Community</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="shopkeeper.html" class="grid-item">
+          <img src="images/shopkeeper.avif" alt="Shopkeeper Listings" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Shopkeeper Listings</h3>
+            <p>
+              Discover local shopkeepers offering quality agricultural products
+              and services tailored to your needs.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Local Network</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="chat.html" class="grid-item">
+          <img src="images/Community.jpg" alt="Community Chat" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>AI ChatBot</h3>
+            <p>
+              Get instant answers to your farming questions with our intelligent
+              chatbot. Cultivating Knowledge, Harvesting Growth.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">24/7 Support</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="plantation.html" class="grid-item">
+          <img src="images/Plantation.avif" alt="Plantation Guidance" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Plantation Guidance</h3>
+            <p>
+              Receive expert advice on plantation techniques, crop selection,
+              and sustainable farming methods.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Expert Tips</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="Crop_Planning/templates/cropplan.html" class="grid-item">
+          <img src="images/Cropplan.jpg" alt="Crop Planning" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Crop Planning</h3>
+            <p>
+              Plan your season with confidence and unlock your farm's true
+              potential for a more profitable and sustainable future.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Strategic</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="Labour_Alerts/templates/labour.html" class="grid-item">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStjJBgIGmDDh6NzJSUF8AmM_TuDO_MEPiOIA&s"
+            alt="Schedule Labour & Alerts" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Labour Scheduling & Alerts</h3>
+            <p>
+              Receive real-world updates related to weather, jobs, government
+              subsidies and more to optimize your operations.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Real-time</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="Forum/forum.html" class="grid-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/3063/3063826.png" alt="Farmer Forum" loading="lazy"
+            style="width:100%; height:200px; object-fit:cover; border-radius:8px;" />
+
+          <div class="grid-item-content">
+            <h3>Farmer Forum</h3>
+            <p>
+              Connect with other farmers, share advice, and discuss tips for improving yields and efficiency.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Community</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="Crop_Prices_Tracker/templates/crop_price_tracker.html" class="grid-item">
+          <img src="https://d3nn873nee648n.cloudfront.net/900x600/10734/14-SP305920.jpg" alt="Crop Price Tracker"
+            loading="lazy" />
+          <div class="grid-item-content">
+            <h3>Crop Price Tracker</h3>
+            <p>
+              Track real-time mandi prices for crops across states and markets
+              to make informed selling decisions.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Market Data</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="ollama-predictions.html" class="grid-item">
+          <img
+            src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+            alt="Ollama AI Predictions" loading="lazy" />
+          <div class="grid-item-content">
+            <h3>🧠 Ollama AI Predictions</h3>
+            <p>
+              Advanced local AI predictions using Llama3 for crop recommendations,
+              disease analysis, and personalized farming advice.
+            </p>
+            <div class="grid-item-footer">
+              <span class="feature-badge">Local AI</span>
+              <span class="arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+      </section>
+
+      <body>
+        <div class="container">
+          <header>
+            <h1>Smart Loan Guide for Farmers</h1>
+            <p>Select the type of loan you want to apply for:</p>
+          </header>
+
+          <div class="loan-cards">
+            <div class="loan-card" data-type="crop">
+              <img
+                src="https://5.imimg.com/data5/SELLER/Default/2024/2/389292204/CR/MJ/TT/191214086/fresh-wheat-crop.webp"
+                alt="Crop Cultivation">
+              <span>Crop Cultivation</span>
+            </div>
+            <div class="loan-card" data-type="equipment">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1DzqFJ-uX4N9Hm1AO-o88YUgG40sl6WPJTg&s"
+                alt="Farm Equipment">
+              <span>Farm Equipment</span>
+            </div>
+            <div class="loan-card" data-type="water">
+              <img
+                src="https://img-cdn.publive.online/fit-in/1200x675/filters:format(webp)/saur-energy/media/post_attachments/2017/06/Solar-Pump-Irrigators.jpg"
+                alt="Water Source">
+              <span>Water Source Development</span>
+            </div>
+            <div class="loan-card" data-type="land">
+              <img src="https://genuineplots.com/images/propertytype/featured1-compressed.jpg" alt="Land Purchase">
+              <span>Land Purchase</span>
+            </div>
+          </div>
+
+          <!-- Loan Guide Redirect Section -->
+          <section id="loan-guide" class="loan-guide-section">
+            <h2>Smart Loan Eligibility Guide</h2>
+            <p>Get step-by-step assistance for applying for agricultural loans.</p>
+            <div style="margin-top: 20px;">
+              <a href="smart_loan.html" class="btn-green" id="goLoanGuide" style="margin-right: 20px;">Go to Smart Loan
+                Guide</a>
+              <label for="languageSelect">Language:</label>
+              <select id="languageSelect" class="language-select">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+              </select>
+            </div>
+
+          </section>
+        </div>
+    </main>
+  </nav>
+
+  <!-- Footer -->
+  <style>
+    .site-footer {
+      background: linear-gradient(135deg, #2e7d32, #66bb6a);
+      color: #fff;
+      margin-top: auto;
+      padding: 2rem 1.25rem;
+    }
+
+    .site-footer .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      align-items: center;
+    }
+
+    .footer-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #fff;
+      padding: 4px
+    }
+
+    .site-footer h3,
+    .site-footer h4 {
+      margin: 0 0 .5rem 0
+    }
+
+    .site-footer p {
+      margin: 0;
+      opacity: 0.9
+    }
+
+    .site-footer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column
+    }
+
+    .site-footer a {
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.9;
+      width: max-content;
+      background-color: none;
+    }
+
+    .site-footer a:hover {
+      opacity: 1;
+      text-decoration: underline
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .social-media {
+      display: flex;
+      gap: 1rem;
+      margin-top: .5rem
+    }
+
+    .social-media a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, .1);
+      border-radius: 50%;
+      transition: all .3s ease;
+      font-size: 1.2rem
+    }
+
+    .social-media a:hover {
+      background: rgba(255, 255, 255, .2);
+      transform: translateY(-2px)
+    }
+  </style>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="images/logo.png" alt="AgriTech logo" class="footer-logo">
+        <h3>AgriTech</h3>
+        <p>Empowering India's Farming Future</p>
+        <div class="social-media">
+          <a href="https://instagram.com" target="_blank" aria-label="Follow us on Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://github.com/omroy07" target="_blank" aria-label="View our GitHub repositories">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/om-roy-3b809628a/" target="_blank"
+            aria-label="Connect with us on LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="main.html">Dashboard</a></li>
+          <li><a href="feed-back.html">Feedback</a></li>
+          <li><a href="chat.html">AI Assistant</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="Crop Recommendation/templates/index.html">Crop Recommendation</a></li>
+          <li><a href="crop-yield-prediction">Yield Prediction</a></li>
+
+          <li><a href="Crop_Planning/templates/cropplan.html">Crop Planner</a></li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top: 2rem; opacity: 0.8">
+      &copy; 2025 AgriTech | Empowering India's Farming Future 🇮🇳
+    </p>
+  </footer>
+
+  <!-- JavaScript Files -->
+  <script src="main.js"></script>
+  Logout-Button
+  <script src="theme.js"></script>
+
+  <button class="scroll-to-top" id="scrollToTop" title="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // Scroll to top functionality
+    const scrollToTopBtn = document.getElementById("scrollToTop");
+
+    window.addEventListener("scroll", () => {
+      if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add("visible");
+      } else {
+        scrollToTopBtn.classList.remove("visible");
+      }
+    });
+
+    scrollToTopBtn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+
+    // Simple Authentication Manager for AgriTech
+    class AuthManager {
+      constructor() {
+        this.users = this.loadUsers();
+        this.currentUser = this.getCurrentUser();
+      }
+
+      // Load users from localStorage (fallback to empty array if not available)
+      loadUsers() {
+        try {
+          const users = localStorage.getItem('agritech_users');
+          return users ? JSON.parse(users) : [];
+        } catch (error) {
+          console.error('Error loading users:', error);
+          return [];
+        }
+      }
+
+      // Save users to localStorage
+      saveUsers() {
+        try {
+          localStorage.setItem('agritech_users', JSON.stringify(this.users));
+        } catch (error) {
+          console.error('Error saving users:', error);
+        }
+      }
+
+      // Get current user session
+      getCurrentUser() {
+        try {
+          const user = localStorage.getItem('agritech_current_user');
+          return user ? JSON.parse(user) : null;
+        } catch (error) {
+          console.error('Error getting current user:', error);
+          return null;
+        }
+      }
+
+      // Check if user is logged in
+      isLoggedIn() {
+        return this.currentUser !== null;
+      }
+
+      // Logout user
+      logout() {
+        try {
+          localStorage.removeItem('agritech_current_user');
+          this.currentUser = null;
+          return { success: true, message: 'Logged out successfully' };
+        } catch (error) {
+          console.error('Error during logout:', error);
+          return { success: false, message: 'Error during logout' };
+        }
+      }
+    }
+
+    // Initialize global auth manager
+    window.authManager = new AuthManager();
+
+    // Utility function to show authentication messages
+    function showAuthMessage(message, type = 'info') {
+      // Remove existing messages
+      const existingMessage = document.querySelector('.auth-message');
+      if (existingMessage) {
+        existingMessage.remove();
+      }
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `auth-message auth-message-${type}`;
+      messageDiv.innerHTML = `
+          <div class="auth-message-content">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <span>${message}</span>
+          </div>
+        `;
+
+      messageDiv.style.animation = 'slideInRight 0.3s ease-out';
+      document.body.appendChild(messageDiv);
+
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        if (messageDiv.parentNode) {
+          messageDiv.style.animation = 'slideOutRight 0.3s ease-out';
+          setTimeout(() => {
+            if (messageDiv.parentNode) {
+              messageDiv.remove();
+            }
+          }, 300);
+        }
+      }, 5000);
+    }
+
+    // Check authentication on protected pages
+    function requireAuth() {
+      if (!window.authManager.isLoggedIn()) {
+        showAuthMessage('Please log in to access this page', 'error');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
+        return false;
+      }
+      return true;
+    }
+
+    // Logout confirmation function
+    function showLogoutConfirmation() {
+      Swal.fire({
+        title: 'Confirm Logout',
+        text: 'Are you sure you want to logout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, logout',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const logoutResult = window.authManager.logout();
+          if (logoutResult.success) {
+            Swal.fire({
+              title: 'Logged Out!',
+              text: logoutResult.message,
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            }).then(() => {
+              // Redirect to index.html after logout
+              window.location.href = 'index.html';
+            });
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: logoutResult.message,
+              icon: 'error'
+            });
+          }
+        }
+      });
+    }
+
+    // Check authentication and update UI on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      // For now, we'll comment out the authentication requirement
+      // Uncomment the line below if you want to enforce authentication
+      // if (!requireAuth()) return;
+
+      const currentUser = window.authManager.getCurrentUser();
+      if (currentUser) {
+        // Update header to show user name
+        const headerTitle = document.querySelector('header h2');
+        if (headerTitle) {
+          headerTitle.textContent = `Welcome to AgriTech, ${currentUser.fullname}!`;
+        }
+      }
+    });
+
+    // Loan Guide Language Selection
+    document.getElementById('goLoanGuide').addEventListener('click', function (event) {
+      event.preventDefault();
+      const lang = document.getElementById('languageSelect').value;
+      window.location.href = `smart_loan.html?lang=${lang}`;
+    });
+  </script>
+
+</body>
+
+</html>

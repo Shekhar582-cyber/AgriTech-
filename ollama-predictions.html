@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ollama AI Predictions - AgriTech</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="theme.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-secondary, #f6f9f6);
+            color: var(--text-primary, #333);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav-back {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-back:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .page-title p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .status-card {
+            background: var(--bg-primary, #fff);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .status-card.connected {
+            border-color: #4caf50;
+        }
+
+        .status-card.error {
+            border-color: #f44336;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .status-icon.connected {
+            background: #4caf50;
+        }
+
+        .status-icon.error {
+            background: #f44336;
+        }
+
+        .prediction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .prediction-card {
+            background: var(--bg-primary, #fff);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .prediction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
+            border-color: #4caf50;
+        }
+
+        .prediction-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .prediction-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .prediction-form {
+            background: var(--bg-primary, #fff);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-area {
+            background: var(--bg-primary, #fff);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 200px;
+            display: none;
+        }
+
+        .result-area.show {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: #4caf50;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .model-info {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(46, 125, 50, 0.1));
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .model-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .model-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Dark mode styles */
+        [data-theme="dark"] .status-card,
+        [data-theme="dark"] .prediction-card,
+        [data-theme="dark"] .prediction-form,
+        [data-theme="dark"] .result-area {
+            background: #2d2d2d;
+            border-color: #404040;
+        }
+
+        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group textarea,
+        [data-theme="dark"] .form-group select {
+            background: #3d3d3d;
+            border-color: #505050;
+            color: #ffffff;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .prediction-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Ollama AI Predictions</h1>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button class="theme-toggle" aria-label="Toggle dark/light mode">
+                    <i class="fas fa-sun sun-icon"></i>
+                    <i class="fas fa-moon moon-icon"></i>
+                    <span class="theme-text">Light</span>
+                </button>
+                <a href="main.html" class="nav-back">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>🤖 Ollama AI Agricultural Predictions</h1>
+            <p>Harness the power of local AI with Llama3 for intelligent farming insights and predictions</p>
+        </div>
+
+        <!-- Ollama Status Card -->
+        <div class="status-card" id="statusCard">
+            <div class="status-header">
+                <div class="status-icon" id="statusIcon">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+                <div>
+                    <h3 id="statusTitle">Checking Ollama Connection...</h3>
+                    <p id="statusDescription">Please wait while we verify the connection to your local Ollama instance.</p>
+                </div>
+            </div>
+            <div class="model-info" id="modelInfo" style="display: none;">
+                <h4>Current Model Information</h4>
+                <p id="modelDetails">Loading model details...</p>
+            </div>
+        </div>
+
+        <!-- Prediction Categories -->
+        <div class="prediction-grid">
+            <div class="prediction-card" onclick="showPredictionForm('crop')">
+                <h3><i class="fas fa-seedling"></i> Crop Recommendation</h3>
+                <p>Get AI-powered crop recommendations based on soil conditions, weather, and local factors using Llama3.</p>
+            </div>
+
+            <div class="prediction-card" onclick="showPredictionForm('weather')">
+                <h3><i class="fas fa-cloud-sun"></i> Weather Impact Analysis</h3>
+                <p>Analyze how weather patterns will affect your crops and get actionable farming advice.</p>
+            </div>
+
+
+
+            <div class="prediction-card" onclick="showPredictionForm('market')">
+                <h3><i class="fas fa-chart-line"></i> Market Price Prediction</h3>
+                <p>Get insights on crop pricing trends and optimal selling times using AI analysis.</p>
+            </div>
+
+            <div class="prediction-card" onclick="showPredictionForm('soil')">
+                <h3><i class="fas fa-mountain"></i> Soil Health Analysis</h3>
+                <p>Analyze soil conditions and get recommendations for improvement and fertilization.</p>
+            </div>
+
+            <div class="prediction-card" onclick="showPredictionForm('general')">
+                <h3><i class="fas fa-comments"></i> General Farming Advice</h3>
+                <p>Ask any farming question and get expert advice from our local Llama3 agricultural assistant.</p>
+            </div>
+        </div>
+
+        <!-- Prediction Form -->
+        <div class="prediction-form" id="predictionForm" style="display: none;">
+            <h3 id="formTitle">AI Prediction</h3>
+            <form id="aiForm">
+                <div class="form-group">
+                    <label for="question">Your Question or Description:</label>
+                    <textarea id="question" rows="4" placeholder="Describe your farming situation, question, or provide details for prediction..." required></textarea>
+                </div>
+                
+                <div class="form-group" id="additionalFields">
+                    <!-- Dynamic fields will be added here based on prediction type -->
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">
+                    <i class="fas fa-brain"></i> Get AI Prediction
+                </button>
+            </form>
+        </div>
+
+        <!-- Results Area -->
+        <div class="result-area" id="resultArea">
+            <h3><i class="fas fa-lightbulb"></i> AI Prediction Results</h3>
+            <div id="resultContent">
+                <!-- Results will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="theme.js"></script>
+    <script>
+        let currentPredictionType = '';
+
+        // Check Ollama status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkOllamaStatus();
+        });
+
+        async function checkOllamaStatus() {
+            try {
+                const response = await fetch('/api/ollama-status');
+                const data = await response.json();
+                
+                const statusCard = document.getElementById('statusCard');
+                const statusIcon = document.getElementById('statusIcon');
+                const statusTitle = document.getElementById('statusTitle');
+                const statusDescription = document.getElementById('statusDescription');
+                const modelInfo = document.getElementById('modelInfo');
+                const modelDetails = document.getElementById('modelDetails');
+
+                if (data.status === 'connected') {
+                    statusCard.className = 'status-card connected';
+                    statusIcon.className = 'status-icon connected';
+                    statusIcon.innerHTML = '<i class="fas fa-check"></i>';
+                    statusTitle.textContent = 'Ollama Connected Successfully!';
+                    statusDescription.textContent = 'Your local AI model is ready for predictions.';
+                    
+                    modelInfo.style.display = 'block';
+                    modelDetails.innerHTML = `
+                        <strong>Current Model:</strong> ${data.current_model}<br>
+                        <strong>Base URL:</strong> ${data.base_url}<br>
+                        <strong>Available Models:</strong> ${data.available_models.join(', ')}
+                    `;
+                } else {
+                    throw new Error(data.message || 'Connection failed');
+                }
+            } catch (error) {
+                const statusCard = document.getElementById('statusCard');
+                const statusIcon = document.getElementById('statusIcon');
+                const statusTitle = document.getElementById('statusTitle');
+                const statusDescription = document.getElementById('statusDescription');
+
+                statusCard.className = 'status-card error';
+                statusIcon.className = 'status-icon error';
+                statusIcon.innerHTML = '<i class="fas fa-times"></i>';
+                statusTitle.textContent = 'Ollama Connection Failed';
+                statusDescription.textContent = 'Please ensure Ollama is running locally. Check if the service is started.';
+            }
+        }
+
+        function showPredictionForm(type) {
+            currentPredictionType = type;
+            const form = document.getElementById('predictionForm');
+            const formTitle = document.getElementById('formTitle');
+            const additionalFields = document.getElementById('additionalFields');
+            const question = document.getElementById('question');
+
+            // Clear previous additional fields
+            additionalFields.innerHTML = '';
+
+            // Set form title and placeholder based on type
+            const formConfigs = {
+                crop: {
+                    title: '🌱 Crop Recommendation Prediction',
+                    placeholder: 'Describe your soil type, climate, available resources, and farming goals...',
+                    fields: `
+                        <div class="form-group">
+                            <label for="soilType">Soil Type:</label>
+                            <select id="soilType">
+                                <option value="">Select soil type</option>
+                                <option value="clay">Clay</option>
+                                <option value="sandy">Sandy</option>
+                                <option value="loamy">Loamy</option>
+                                <option value="silt">Silt</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="climate">Climate Zone:</label>
+                            <select id="climate">
+                                <option value="">Select climate</option>
+                                <option value="tropical">Tropical</option>
+                                <option value="subtropical">Subtropical</option>
+                                <option value="temperate">Temperate</option>
+                                <option value="arid">Arid</option>
+                            </select>
+                        </div>
+                    `
+                },
+                weather: {
+                    title: '🌤️ Weather Impact Analysis',
+                    placeholder: 'Describe current weather conditions and your concerns about crop impact...',
+                    fields: `
+                        <div class="form-group">
+                            <label for="location">Location:</label>
+                            <input type="text" id="location" placeholder="City, State/Region">
+                        </div>
+                    `
+                },
+
+                market: {
+                    title: '📈 Market Price Prediction',
+                    placeholder: 'Specify the crops you want market analysis for and your selling timeline...',
+                    fields: ''
+                },
+                soil: {
+                    title: '🌍 Soil Health Analysis',
+                    placeholder: 'Describe your soil conditions, any tests done, and specific concerns...',
+                    fields: `
+                        <div class="form-group">
+                            <label for="farmSize">Farm Size (acres):</label>
+                            <input type="number" id="farmSize" placeholder="Enter farm size">
+                        </div>
+                    `
+                },
+                general: {
+                    title: '💬 General Farming Advice',
+                    placeholder: 'Ask any farming question - crop selection, techniques, problems, etc...',
+                    fields: ''
+                }
+            };
+
+            const config = formConfigs[type];
+            formTitle.textContent = config.title;
+            question.placeholder = config.placeholder;
+            additionalFields.innerHTML = config.fields;
+
+            form.style.display = 'block';
+            form.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('aiForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const resultArea = document.getElementById('resultArea');
+            const resultContent = document.getElementById('resultContent');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            
+            resultArea.className = 'result-area show';
+            resultContent.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-brain fa-spin"></i>
+                    <p>Ollama AI is analyzing your request...</p>
+                </div>
+            `;
+
+            try {
+                // Collect form data
+                const question = document.getElementById('question').value;
+                let additionalInfo = '';
+
+                // Collect additional field data
+                const additionalFields = document.getElementById('additionalFields');
+                const inputs = additionalFields.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    if (input.value) {
+                        additionalInfo += `${input.previousElementSibling.textContent} ${input.value}\n`;
+                    }
+                });
+
+                const fullPrompt = `${question}\n\nAdditional Information:\n${additionalInfo}`;
+
+                // Send request to chat endpoint
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: fullPrompt
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    resultContent.innerHTML = `
+                        <div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <strong>🤖 AI Model:</strong> ${data.model || 'Llama3'}
+                        </div>
+                        <div style="white-space: pre-wrap; line-height: 1.6;">${data.message}</div>
+                    `;
+                } else {
+                    throw new Error(data.message || 'Prediction failed');
+                }
+
+            } catch (error) {
+                resultContent.innerHTML = `
+                    <div style="background: rgba(244, 67, 54, 0.1); padding: 1rem; border-radius: 8px; color: #d32f2f;">
+                        <strong>❌ Error:</strong> ${error.message}
+                        <br><br>
+                        Please ensure Ollama is running and try again.
+                    </div>
+                `;
+            } finally {
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-brain"></i> Get AI Prediction';
+            }
+        });
+    </script>
+</body>
+</html>

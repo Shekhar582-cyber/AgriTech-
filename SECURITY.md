@@ -139,9 +139,7 @@ Applications include security headers:
 - ✅ Numeric input sanitization
 - ✅ Comprehensive error handling
 
-### 3. Crop Prices Tracker (`Crop_Prices_Tracker/app.py`)
-- ✅ Input sanitization
-- ✅ API error handling
+
 - ✅ Timeout protection
 - ✅ Data validation
 
